@@ -15,13 +15,24 @@ app.listen(3050,()=>{
 //impportar o modulo mongoose
 const mongoose = require('mongoose')
 //configurar p script de conexão
-const conexão = ()=>{
-    mongoose.connect('mongodb+srv://<userRevisao>:magaldi321@fiaptecnico.5fetl.mongodb.net/test')
+const conexao = ()=>{
+    mongoose.connect('mongodb+srv://userRevisao:magaldi321@fiaptecnico.5fetl.mongodb.net/revisao')
 }
-
+//achar o modelo para a coleção alunos
+const modelo = new mongoose.Schema({
+    nome:String,
+    turma:String,
+    disciplina:String
+})
+//definir o modelo para a coleção alunos
+const alunos = mongoose.model('alunos',modelo)
 /* configuração do banco de dados - fim */
 /* rota para requisição /*/
-app.get('/',(req,res)=>{
+app.get('/',async(req,res)=>{
+    conexao()
+    //pesnquisar os documentos na collection alunos
+    const resultado = await alunos.find()
+    console.log(resultado)
     //res.send('Funcionando')
-    res.render('index.ejs',{nome:"Bruno Lindo", turma:"2EMIA", disciplina:"LP2"})
+    res.render('index.ejs',{resultado})
 })
